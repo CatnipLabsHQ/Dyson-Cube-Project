@@ -12,7 +12,7 @@ public class NumberUtils {
             float numb = (float) (number / 1000_000_000F);
             return formatterWithUnits.format(numb) + "B";
         } else if (number >= 1000000) { //MILLION
-            float numb = (float) (number / 1000000F);
+            float numb = (float) (number / 1000_000F);
             if (number > 100000000) numb = Math.round(numb);
             return formatterWithUnits.format(numb) + "M";
         } else if (number >= 1000) { //THOUSANDS
@@ -37,6 +37,23 @@ public class NumberUtils {
         return decimalFormat.format(value / Math.pow(1000, exp)) + suffixes[exp];
     }
 
+    /**
+     * Kompakte Anzeige für GUI-Texte: 185523900 -> "185.5M"
+     */
+    public static String formatShortNumber(long value) {
+        if (value >= 1_000_000_000_000L) {
+            return String.format("%.1fT", value / 1_000_000_000_000.0);
+        } else if (value >= 1_000_000_000L) {
+            return String.format("%.1fB", value / 1_000_000_000.0);
+        } else if (value >= 1_000_000L) {
+            return String.format("%.1fM", value / 1_000_000.0);
+        } else if (value >= 1_000L) {
+            return String.format("%.1fK", value / 1_000.0);
+        } else {
+            return String.valueOf(value);
+        }
+    }
+
     public static double customCeil(double value) {
         if (value == (long) value) {
             return value; // Already an integer
@@ -44,4 +61,3 @@ public class NumberUtils {
         return (value > 0) ? (long) value + 1 : (long) value;
     }
 }
-

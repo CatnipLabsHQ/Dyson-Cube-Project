@@ -252,7 +252,7 @@ public class DysonCubeProject extends ModuleController {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         event.getEntity().sendSystemMessage(
-            Component.literal("⚡ Kater's Dyson Cube Project Fork V1.1 ⚡")
+            Component.literal("⚡ Kater's Dyson Cube Project Fork V1.2 ⚡")
                 .withStyle(ChatFormatting.LIGHT_PURPLE)
         );
     }

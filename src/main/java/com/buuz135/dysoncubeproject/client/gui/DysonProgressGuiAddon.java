@@ -52,7 +52,7 @@ public class DysonProgressGuiAddon extends BasicScreenAddon {
         ++y;
         guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.beams", new DecimalFormat().format(dyson.getBeams())).withStyle(ChatFormatting.BLUE), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
         ++y;
-        guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.sails", new DecimalFormat().format(dyson.getSolarPanels()), NumberUtils.getFormatedBigNumber(dyson.getMaxSolarPanels())).withStyle(ChatFormatting.BLUE), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
+       guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.sails", NumberUtils.formatShortNumber(dyson.getSolarPanels()), NumberUtils.formatShortNumber(dyson.getMaxSolarPanels())).withStyle(ChatFormatting.BLUE), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
         ++y;
         if (dyson.getSolarPanels() >= dyson.getMaxSolarPanels() && dyson.getSolarPanels() < Config.MAX_SOLAR_PANELS) {
             guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.needs_more_beams").withStyle(ChatFormatting.RED), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
