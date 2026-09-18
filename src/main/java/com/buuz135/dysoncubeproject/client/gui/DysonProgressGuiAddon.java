@@ -46,7 +46,7 @@ public class DysonProgressGuiAddon extends BasicScreenAddon {
         ++y;
         guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.progress", new DecimalFormat().format(dyson.getProgress() * 100)).withStyle(ChatFormatting.BLUE), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
         ++y;
-        guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.power_gen", NumberUtils.getFormatedBigNumber(dyson.getSolarPanels() * Config.POWER_PER_SAIL)).withStyle(ChatFormatting.BLUE), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
+        guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.power_gen", NumberUtils.getFormatedBigNumber(dyson.getPowerGeneration())).withStyle(ChatFormatting.BLUE), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
         ++y;
         guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.power_con", NumberUtils.getFormatedBigNumber(dyson.getLastConsumedPower())).withStyle(ChatFormatting.BLUE), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
         ++y;
@@ -80,7 +80,7 @@ public class DysonProgressGuiAddon extends BasicScreenAddon {
         var dyson = ClientDysonSphere.DYSON_SPHERE_PROGRESS.getSpheres().computeIfAbsent(dysonID, s -> new DysonSphereStructure());
         list.add(Component.translatable("gui.dysoncubeproject.dyson_information").withStyle(ChatFormatting.BLUE));
         list.add(Component.translatable("gui.dysoncubeproject.progress", new DecimalFormat().format(dyson.getProgress() * 100)).withStyle(ChatFormatting.BLUE));
-        list.add(Component.translatable("gui.dysoncubeproject.power_gen", new DecimalFormat().format(dyson.getSolarPanels() * Config.POWER_PER_SAIL)).withStyle(ChatFormatting.BLUE));
+        list.add(Component.translatable("gui.dysoncubeproject.power_gen", new DecimalFormat().format(dyson.getPowerGeneration())).withStyle(ChatFormatting.BLUE));
         list.add(Component.translatable("gui.dysoncubeproject.power_con", new DecimalFormat().format(dyson.getLastConsumedPower())).withStyle(ChatFormatting.BLUE));
         list.add(Component.translatable("gui.dysoncubeproject.beams", new DecimalFormat().format(dyson.getBeams())).withStyle(ChatFormatting.BLUE));
         list.add(Component.translatable("gui.dysoncubeproject.sails", new DecimalFormat().format(dyson.getSolarPanels()), new DecimalFormat().format(dyson.getMaxSolarPanels())).withStyle(ChatFormatting.BLUE));

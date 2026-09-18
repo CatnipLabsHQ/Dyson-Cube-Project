@@ -40,8 +40,15 @@ import org.slf4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+
 
 @Mod(DysonCubeProject.MODID)
+@EventBusSubscriber(modid = DysonCubeProject.MODID)
 public class DysonCubeProject extends ModuleController {
 
     public static final String MODID = "dysoncubeproject";
@@ -239,5 +246,14 @@ public class DysonCubeProject extends ModuleController {
                 DCPContent.Blocks.RAY_RECEIVER_CONTROLLER.getBlock()), event.getLookupProvider()));
         event.addProvider(new DCPBlockTagsProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), MODID, event.getExistingFileHelper()));
         event.addProvider(new DCPAdvancementProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
+    }
+
+
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        event.getEntity().sendSystemMessage(
+            Component.literal("⚡ Kater's Dyson Cube Project Fork V1.0 ⚡")
+                .withStyle(ChatFormatting.LIGHT_PURPLE)
+        );
     }
 }

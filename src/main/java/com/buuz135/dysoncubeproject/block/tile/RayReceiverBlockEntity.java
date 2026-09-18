@@ -72,37 +72,38 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
         this.currentPitch = 270;
     }
 
-    @Override
-    public void serverTick(Level level, BlockPos pos, BlockState state, RayReceiverBlockEntity blockEntity) {
-        if (level.isDay() && !level.isRaining() && level.canSeeSky(pos.above())) {
-            var dyson = DysonSphereProgressSavedData.get(level);
-            var extractingAmount = Math.min(Config.RAY_RECEIVER_EXTRACT_POWER, this.energyStorageComponent.getMaxEnergyStored() - this.energyStorageComponent.getEnergyStored());
-            var extracted = dyson.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereStructure()).extractPower(extractingAmount);
-            this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() + extracted);
-        }
-        var capability = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.below(), Direction.UP);
-        if (capability != null && capability.canReceive()) {
-            var received = capability.receiveEnergy(Math.min(Config.RAY_RECEIVER_EXTRACT_POWER, this.energyStorageComponent.getEnergyStored()), true);
-            this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() - received);
-            capability.receiveEnergy(received, false);
-        }
-
-        float targetPitch = level.getTimeOfDay(1f) * 360f;
-
-
-        if (targetPitch >= 90 && targetPitch <= 270) {
-            targetPitch = 270;
-        }
-
-
-        if ((this.currentPitch) % 360 <= targetPitch) {
-            this.currentPitch = Math.min((this.currentPitch + 1) % 360, targetPitch);
-        } else if (this.currentPitch > targetPitch) {
-            this.currentPitch = Math.max(this.currentPitch - 1, targetPitch);
-        }
-
-        syncObject(currentPitch);
+@Override
+public void serverTick(Level level, BlockPos pos, BlockState state, RayReceiverBlockEntity blockEntity) {
+    if (level.isDay() && !level.isRaining() && level.canSeeSky(pos.above())) {
+        var dyson = DysonSphereProgressSavedData.get(level);
+        long extractingAmount = Math.min((long) Config.RAY_RECEIVER_EXTRACT_POWER,
+                (long) this.energyStorageComponent.getMaxEnergyStored() - this.energyStorageComponent.getEnergyStored());
+        long extracted = dyson.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereStructure()).extractPower(extractingAmount);
+        long newStored = (long) this.energyStorageComponent.getEnergyStored() + extracted;
+        this.energyStorageComponent.setEnergyStored((int) Math.min(newStored, Integer.MAX_VALUE));
     }
+    var capability = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.below(), Direction.UP);
+    if (capability != null && capability.canReceive()) {
+        int maxToSend = (int) Math.min(Config.RAY_RECEIVER_EXTRACT_POWER, Integer.MAX_VALUE);
+        var received = capability.receiveEnergy(Math.min(maxToSend, this.energyStorageComponent.getEnergyStored()), true);
+        this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() - received);
+        capability.receiveEnergy(received, false);
+    }
+
+    float targetPitch = level.getTimeOfDay(1f) * 360f;
+
+    if (targetPitch >= 90 && targetPitch <= 270) {
+        targetPitch = 270;
+    }
+
+    if ((this.currentPitch) % 360 <= targetPitch) {
+        this.currentPitch = Math.min((this.currentPitch + 1) % 360, targetPitch);
+    } else if (this.currentPitch > targetPitch) {
+        this.currentPitch = Math.max(this.currentPitch - 1, targetPitch);
+    }
+
+    syncObject(currentPitch);
+}
 
     @OnlyIn(Dist.CLIENT)
     @Override

@@ -10,8 +10,8 @@ public class DysonSphereStructure implements INBTSerializable<CompoundTag> {
 
     private int beams;
     private int solarPanels;
-    private int storedPower;
-    private int lastConsumedPower;
+    private long storedPower;
+    private long lastConsumedPower;
 
     public DysonSphereStructure() {
         this(0, 0);
@@ -59,24 +59,29 @@ public class DysonSphereStructure implements INBTSerializable<CompoundTag> {
         this.solarPanels += amount;
         if (this.solarPanels > getMaxSolarPanels()) this.solarPanels = getMaxSolarPanels();
     }
-
+  
     public void generatePower() {
         this.lastConsumedPower = 0;
-        this.storedPower = Math.min(this.solarPanels * Config.POWER_PER_SAIL, this.storedPower + this.solarPanels * Config.POWER_PER_SAIL);
+        long production = this.getPowerGeneration();
+        this.storedPower = Math.min(production, this.storedPower + production);
     }
 
-    public int extractPower(int amount) {
-        int extracted = Math.min(amount, this.storedPower);
+    public long getPowerGeneration() {
+        return (long) this.solarPanels * Config.POWER_PER_SAIL;
+    }
+
+    public long extractPower(long amount) {
+        long extracted = Math.min(amount, this.storedPower);
         this.storedPower -= extracted;
         this.lastConsumedPower += extracted;
         return extracted;
     }
 
-    public int getStoredPower() {
+    public long getStoredPower() {
         return storedPower;
     }
 
-    public int getLastConsumedPower() {
+    public long getLastConsumedPower() {
         return lastConsumedPower;
     }
 
@@ -85,8 +90,8 @@ public class DysonSphereStructure implements INBTSerializable<CompoundTag> {
         CompoundTag compoundTag = new CompoundTag();
         compoundTag.putInt("beams", beams);
         compoundTag.putInt("solarPanels", solarPanels);
-        compoundTag.putInt("storedPower", storedPower);
-        compoundTag.putInt("lastConsumedPower", lastConsumedPower);
+        compoundTag.putLong("storedPower", storedPower);
+        compoundTag.putLong("lastConsumedPower", lastConsumedPower);
         return compoundTag;
     }
 
@@ -94,7 +99,9 @@ public class DysonSphereStructure implements INBTSerializable<CompoundTag> {
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag) {
         this.beams = compoundTag.getInt("beams");
         this.solarPanels = compoundTag.getInt("solarPanels");
-        this.storedPower = compoundTag.getInt("storedPower");
+       this.storedPower = compoundTag.contains("storedPower", 4)  // 4 = TAG_Long
+        ? compoundTag.getLong("storedPower")
+        : compoundTag.getInt("storedPower");
         this.lastConsumedPower = compoundTag.getInt("lastConsumedPower");
     }
 }
