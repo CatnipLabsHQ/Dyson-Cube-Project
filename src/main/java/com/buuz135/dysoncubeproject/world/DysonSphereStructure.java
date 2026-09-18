@@ -99,9 +99,11 @@ public class DysonSphereStructure implements INBTSerializable<CompoundTag> {
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag) {
         this.beams = compoundTag.getInt("beams");
         this.solarPanels = compoundTag.getInt("solarPanels");
-       this.storedPower = compoundTag.contains("storedPower", 4)  // 4 = TAG_Long
-        ? compoundTag.getLong("storedPower")
-        : compoundTag.getInt("storedPower");
-        this.lastConsumedPower = compoundTag.getInt("lastConsumedPower");
+        this.storedPower = compoundTag.contains("storedPower", 4)  // 4 = TAG_Long
+            ? compoundTag.getLong("storedPower")
+            : compoundTag.getInt("storedPower");
+        this.lastConsumedPower = compoundTag.contains("lastConsumedPower", 4)
+            ? compoundTag.getLong("lastConsumedPower")
+            : compoundTag.getInt("lastConsumedPower");
     }
 }
